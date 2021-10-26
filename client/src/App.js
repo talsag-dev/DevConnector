@@ -1,15 +1,30 @@
 import "./App.css";
-import React, { Fragment } from "react";
 import Navbar from "./components/layout/Navbar";
 import Landing from "./components/layout/Landing";
 import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
 import Register from "./components/auth/Register";
-import { Login } from "./components/auth/Login";
+import Login from "./components/auth/Login";
 import Alert from "./components/layout/Alert";
 import { Provider } from "react-redux";
 import store from "./store";
+import { loadUser } from "./actions/auth";
+import { useEffect } from "react";
+
+import { LOGOUT } from "./actions/types";
+import setAuthToken from "./utils/setAuthToken";
 
 const App = () => {
+  useEffect(() => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+    store.dispatch(loadUser());
+
+    window.addEventListener("storage", () => {
+      if (!localStorage.token) store.dispatch({ type: LOGOUT });
+    });
+  }, []);
+
   return (
     <Provider store={store}>
       <Router>
@@ -22,7 +37,6 @@ const App = () => {
             <Route exact path='/login' component={Login} />
           </Switch>
         </section>
-        <Fragment />
       </Router>
     </Provider>
   );
