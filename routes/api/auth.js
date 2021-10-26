@@ -75,7 +75,7 @@ async (req,res)=>{
 
 
 
-        res.send('User log');
+        res.send('User Reg');
     }catch(err){
         console.error(err.message);
         res.status(500).send('server error');

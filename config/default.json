@@ -1,4 +1,6 @@
 {
     "mongoURI":"mongodb+srv://Talsag:288944@cluster0.n8bbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-    "jwtSecret":"mysecrt"
+    "jwtSecret":"mysecrt",
+    "githubClientId":"fe9615d82674bfaa80f8",
+    "gitHubSecret":"9fb394e1d1813f17263bc899b162333e412f2e60"
 }
