@@ -9,6 +9,7 @@ const connectdb =async () =>{
         await mongoose.connect(db,{
             useNewUrlParser:true
         });
+
         console.log('mongodb connected');
     }catch(err){
         console.error(err.message);

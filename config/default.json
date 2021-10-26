@@ -1,3 +1,4 @@
 {
-    "mongoURI":"mongodb+srv://Talsag:288944@cluster0.n8bbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+    "mongoURI":"mongodb+srv://Talsag:288944@cluster0.n8bbj.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+    "jwtSecret":"mysecrt"
 }
