@@ -28,6 +28,7 @@ const Register = ({ setAlert, register }) => {
       register({ name, email, password });
     }
   };
+
   return (
     <section className='container'>
       <h1 className='large text-primary'>Sign Up</h1>

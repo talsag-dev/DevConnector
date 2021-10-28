@@ -1,8 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import { login } from "../../actions/auth";
 
-export const Login = () => {
+const Login = ({ login }) => {
   const [formData, setformData] = useState({
     email: "",
     password: "",
@@ -14,10 +17,12 @@ export const Login = () => {
       ...formData,
       [e.target.name]: e.target.value,
     });
-  const onSubmit = async (e) => {
+
+  const onSubmit = (e) => {
     e.preventDefault();
-    console.log("ok");
+    login(email, password);
   };
+
   return (
     <section className='container'>
       <h1 className='large text-primary'>Sign In</h1>
@@ -54,3 +59,13 @@ export const Login = () => {
     </section>
   );
 };
+
+Login.propTypes = {
+  login: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);
