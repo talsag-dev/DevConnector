@@ -1,4 +1,1 @@
-Social network for developers, built on the MERN stack and Redux
-
-
-***STILL IN PROGRESS***
+https://evening-waters-52403.herokuapp.com/posts
