@@ -1,34 +1,33 @@
-const express = require("express");
-const auth = require("../../middleware/auth");
+const express = require('express');
 const router = express.Router();
-const User = require("../../models/User");
-const jwt = require("jsonwebtoken");
-const { check, validationResult } = require("express-validator");
-const config = require("config");
-const bcrypt = require("bcryptjs");
+const bcrypt = require('bcryptjs');
+const auth = require('../../middleware/auth');
+const jwt = require('jsonwebtoken');
+const config = require('config');
+const { check, validationResult } = require('express-validator');
 
-//@route GET api/auth
-//@desc auth route
-//@acsses Public
-router.get("/", auth, async (req, res) => {
+const User = require('../../models/User');
+
+// @route    GET api/auth
+// @desc     Get user by token
+// @access   Private
+router.get('/', auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).select("-password");
+    const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("server error");
+    res.status(500).send('Server Error');
   }
 });
 
-//@route POST api/users
-//@desc Authnticate user & get token
-//@acsses Public
+// @route    POST api/auth
+// @desc     Authenticate user & get token
+// @access   Public
 router.post(
-  "/",
-  [
-    check("email", "include a vaild email adress").isEmail(),
-    check("password", "password is required").exists(),
-  ],
+  '/',
+  check('email', 'Please include a valid email').isEmail(),
+  check('password', 'Password is required').exists(),
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -41,40 +40,37 @@ router.post(
       let user = await User.findOne({ email });
 
       if (!user) {
-        return res.status(400).json({ errors: [{ msg: "No such user" }] });
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
       const isMatch = await bcrypt.compare(password, user.password);
 
       if (!isMatch) {
-        return res.status(400).json({ errors: [{ msg: "No such user" }] });
-        //didnt write msg that passwords is wrong because this way a hacker can know that
-        //such a user exits!
+        return res
+          .status(400)
+          .json({ errors: [{ msg: 'Invalid Credentials' }] });
       }
 
-      //return jwtoken//return jwtoken//return jwtoken
       const payload = {
         user: {
-          id: user.id,
-        },
+          id: user.id
+        }
       };
 
       jwt.sign(
         payload,
-        config.get("jwtSecret"),
-        {
-          expiresIn: 3600,
-        },
+        config.get('jwtSecret'),
+        { expiresIn: '5 days' },
         (err, token) => {
           if (err) throw err;
           res.json({ token });
         }
       );
-
-      //return jwtoken//return jwtoken//return jwtoken//return jwtoken
     } catch (err) {
       console.error(err.message);
-      res.status(500).send("server error");
+      res.status(500).send('Server error');
     }
   }
 );
